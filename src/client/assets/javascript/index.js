@@ -182,7 +182,7 @@ function renderRacerCars(racers) {
 
 	return `
 		<ul id="racers">
-			${reuslts}
+			${results}
 		</ul>
 	`
 }
@@ -339,7 +339,6 @@ async function getRacers() {
 		console.log("Error getting racers from the API.")
 		console.error(erorr)
 	}
-	
 }
 
 function createRace(player_id, track_id) {
