@@ -9,26 +9,26 @@ var store = {
 
 // We need our javascript to wait until the DOM is loaded
 document.addEventListener("DOMContentLoaded", function() {
-	onPageLoad()
-	setupClickHandlers()
+	onPageLoad();
+	setupClickHandlers();
 })
 
 async function onPageLoad() {
 	try {
 		getTracks()
 			.then(tracks => {
-				const html = renderTrackCards(tracks)
-				renderAt('#tracks', html)
+				const html = renderTrackCards(tracks);
+				renderAt('#tracks', html);
 			})
 
 		getRacers()
 			.then((racers) => {
-				const html = renderRacerCars(racers)
-				renderAt('#racers', html)
+				const html = renderRacerCars(racers);
+				renderAt('#racers', html);
 			})
 	} catch(error) {
-		console.log("Problem getting tracks and racers ::", error.message)
-		console.error(error)
+		console.log("Problem getting tracks and racers ::", error.message);
+		console.error(error);
 	}
 }
 
@@ -75,9 +75,6 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
 	try {
-		// render starting UI
-		renderAt('#race', renderRaceStartView())
-
 		// Get player_id and track_id from the store
 		const { player_id, track_id } = store;
 
@@ -86,6 +83,9 @@ async function handleCreateRace() {
 
 		// update the store with the race id
 		store.race_id = parseInt(race.ID) - 1;
+
+		// render starting UI
+		renderAt('#race', renderRaceStartView(race))
 
 		// The race has been created, now start the countdown
 		// call the async function runCountdown
@@ -333,7 +333,7 @@ function defaultFetchOpts() {
 	}
 }
 
-// TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
+// Make a fetch call (with error handling!) to each of the following API endpoints 
 
 async function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
@@ -397,4 +397,10 @@ function accelerate(id) {
 	// POST request to `${SERVER}/api/races/${id}/accelerate`
 	// options parameter provided as defaultFetchOpts
 	// no body or datatype needed for this request
+
+	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
+		method: 'POST',
+		...defaultFetchOpts(),
+	})
+		.catch(err => console.log('Problem with getRace request::', err));
 }
