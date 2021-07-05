@@ -78,23 +78,23 @@ async function handleCreateRace() {
 		// render starting UI
 		renderAt('#race', renderRaceStartView())
 
-		// TODO - Get player_id and track_id from the store
+		// Get player_id and track_id from the store
 		const { player_id, track_id } = store;
 
-		// const race = TODO - invoke the API call to create the race, then save the result
+		// const race = invoke the API call to create the race, then save the result
 		const race = createRace(player_id, track_id) 
 
-		// TODO - update the store with the race id
+		// update the store with the race id
 		store.race_id = parseInt(race.ID) - 1;
 
 		// The race has been created, now start the countdown
-		// TODO - call the async function runCountdown
+		// call the async function runCountdown
 		await runCountdown();
 			
-		// TODO - call the async function startRace
+		// call the async function startRace
 		await startRace(store.race_id);
 
-		// TODO - call the async function runRace
+		// call the async function runRace
 		runRace(store.race_id);
 	} catch (error) {
 		console.log("Error while creating the race.")
@@ -117,7 +117,7 @@ function runRace(raceID) {
 			}
 		}, 500, store.race_id);
 	})
-	.catch(error => console.log(error)); // remember to add error handling for the Promise
+	.catch(error => console.error(error)); // remember to add error handling for the Promise
 }
 
 async function runCountdown() {
@@ -127,13 +127,19 @@ async function runCountdown() {
 		let timer = 3
 
 		return new Promise(resolve => {
-			// TODO - use Javascript's built in setInterval method to count down once per second
-
-			// run this DOM manipulation to decrement the countdown for the user
-			document.getElementById('big-numbers').innerHTML = --timer
-
-			// TODO - if the countdown is done, clear the interval, resolve the promise, and return
-
+			return new Promise(resolve => {
+				const interval = setInterval(() => 
+				{
+					if (timer >= 0) {
+						// run this DOM manipulation to decrement the countdown for the user
+						document.getElementById('big-numbers').innerHTML = timer--;
+					}
+					else{
+						clearInterval(interval);
+						resolve();
+					}
+				}, 1000);
+			})
 		})
 	} catch(error) {
 		console.log(error);
