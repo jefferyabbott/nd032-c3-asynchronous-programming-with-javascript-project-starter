@@ -321,14 +321,25 @@ function defaultFetchOpts() {
 
 async function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
-	const tracks = await fetch(`${SERVER}/api/tracks`)
-	return tracks.json()
+	try {
+		const tracks = await fetch(`${SERVER}/api/tracks`)
+		return tracks.json()
+	} catch (error) {
+		console.log("Error getting tracks from the API.")
+		console.error(error)
+	}	
 }
 
 async function getRacers() {
 	// GET request to `${SERVER}/api/cars`
-	const racers = await fetch(`${SERVER}/api/cars`)
-	return racers.json()
+	try {
+		const racers = await fetch(`${SERVER}/api/cars`)
+		return racers.json()
+	} catch (error) {
+		console.log("Error getting racers from the API.")
+		console.error(erorr)
+	}
+	
 }
 
 function createRace(player_id, track_id) {
@@ -348,8 +359,14 @@ function createRace(player_id, track_id) {
 
 async function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
-	const race = await fetch(`${SERVER}/api/races/${id}`)
-	return race.json()
+	try {
+		const race = await fetch(`${SERVER}/api/races/${id}`)
+		return race.json()
+	} catch (error) {
+		console.log("Error getting race data from the API.")
+		console.error(error)
+	}	
+	
 }
 
 function startRace(id) {
