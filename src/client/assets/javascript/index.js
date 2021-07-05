@@ -174,8 +174,8 @@ function handleSelectTrack(target) {
 	// add class selected to current target
 	target.classList.add('selected')
 
-	// TODO - save the selected track id to the store
-	
+	// save the selected track id to the store
+	store.track_id = target.id;
 }
 
 function handleAccelerate() {
