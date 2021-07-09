@@ -77,12 +77,13 @@ async function handleCreateRace() {
 	try {
 		// Get player_id and track_id from the store
 		const { player_id, track_id } = store;
+		console.log(`from handleCreateRace: ${player_id} and ${track_id}`)
 
 		// const race = invoke the API call to create the race, then save the result
-		const race = createRace(player_id, track_id) 
+		const race = await createRace(player_id, track_id) 
 
 		// update the store with the race id
-		store.race_id = parseInt(race.ID) - 1;
+		store.race_id = parseInt(race.ID);
 
 		// render starting UI
 		renderAt('#race', renderRaceStartView(race))
@@ -179,7 +180,6 @@ function handleSelectTrack(target) {
 }
 
 function handleAccelerate() {
-	console.log("accelerate button clicked")
 	// Invoke the API call to accelerate
 	accelerate(store.race_id);
 }
@@ -375,7 +375,8 @@ function createRace(player_id, track_id) {
 async function getRace(id) {
 	// GET request to `${SERVER}/api/races/${id}`
 	try {
-		const race = await fetch(`${SERVER}/api/races/${id}`)
+		const race = await fetch(`${SERVER}/api/races/${id - 1}`)
+		console.log(race)
 		return race.json()
 	} catch (error) {
 		console.log("Error getting race data from the API.")
@@ -385,7 +386,7 @@ async function getRace(id) {
 }
 
 function startRace(id) {
-	return fetch(`${SERVER}/api/races/${id}/start`, {
+	return fetch(`${SERVER}/api/races/${id -1 }/start`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
@@ -393,12 +394,12 @@ function startRace(id) {
 	.catch(err => console.log("Problem with getRace request::", err))
 }
 
-function accelerate(id) {
+async function accelerate(id) {
 	// POST request to `${SERVER}/api/races/${id}/accelerate`
 	// options parameter provided as defaultFetchOpts
 	// no body or datatype needed for this request
-
-	return fetch(`${SERVER}/api/races/${id}/accelerate`, {
+	console.log(`Accelerating: ${id}`)
+	return await fetch(`${SERVER}/api/races/${id - 1}/accelerate`, {
 		method: 'POST',
 		...defaultFetchOpts(),
 	})
